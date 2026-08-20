@@ -178,9 +178,10 @@ describe("Testnet Contracts", function () {
 
     it("should subscribe with MATIC when whitelisted", async function () {
       await govToken.connect(deployer).transfer(user.address, ethers.parseEther("100"));
+      await digitalRWA.connect(deployer).syncPrice();
       const amount = ethers.parseEther("5");
       await digitalRWA.connect(user).subscribe({ value: amount });
-      expect(await digitalRWA.balanceOf(user.address)).to.equal(amount);
+      expect(await digitalRWA.balanceOf(user.address)).to.equal(ethers.parseEther("5000"));
     });
 
     it("should block subscribe when not whitelisted", async function () {

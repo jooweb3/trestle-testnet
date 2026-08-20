@@ -25,3 +25,6 @@ next-env.d.ts
 # Verification artifacts
 verify-*.json
 *-checkpoint.json
+
+# OS
+.DS_Store

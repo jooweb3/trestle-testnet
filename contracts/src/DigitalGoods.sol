@@ -246,14 +246,15 @@ contract DigitalGoods is Ownable, ReentrancyGuard {
         if (l.deliveryConfirmed) revert AlreadyConfirmed();
         if (block.timestamp < l.disputeDeadline) revert WrongStatus();
 
-        if (l.status == ListingStatus.Sold) {
+        bool toSeller = l.status == ListingStatus.Sold;
+        if (toSeller) {
             l.deliveryConfirmed = true;
             _releaseToSeller(_id);
         } else {
             l.status = ListingStatus.Refunded;
             _releaseToBuyer(_id);
         }
-        emit Resolved(_id, l.status == ListingStatus.Sold);
+        emit Resolved(_id, toSeller);
     }
 
     function cancelListing(uint256 _id) external nonReentrant {

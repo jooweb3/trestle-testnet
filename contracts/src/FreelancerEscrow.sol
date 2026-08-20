@@ -517,7 +517,7 @@ contract FreelancerEscrow is Ownable, AccessControl, ReentrancyGuard {
         Project storage p = projects[_id];
         if (p.status != ProjectStatus.Open) revert WrongStatus();
         if (p.freelancer != address(0)) revert AlreadyAccepted();
-        if (p.escrowedAmount < p.totalBudget) revert NoFunds();
+        if (p.escrowedAmount == 0) revert NoFunds();
 
         p.freelancer = msg.sender;
         p.status = ProjectStatus.InProgress;
@@ -529,7 +529,7 @@ contract FreelancerEscrow is Ownable, AccessControl, ReentrancyGuard {
         if (p.pricing != PricingMode.DutchAuction) revert WrongStatus();
         if (p.status != ProjectStatus.Open) revert WrongStatus();
         if (p.freelancer != address(0)) revert AlreadyAccepted();
-        if (p.escrowedAmount < p.totalBudget) revert NoFunds();
+        if (p.escrowedAmount == 0) revert NoFunds();
 
         p.freelancer = msg.sender;
         p.status = ProjectStatus.InProgress;
@@ -627,15 +627,20 @@ contract FreelancerEscrow is Ownable, AccessControl, ReentrancyGuard {
         uint256 yieldOut = _withdrawFromVault(_id, amount);
         p.escrowedAmount = 0;
 
+        address recipient;
         if (approvedCount * 2 > p.milestones.length) {
-            _send(p.paymentToken, p.freelancer, amount);
-            if (yieldOut > 0) _distributeYield(_id, p.paymentToken, yieldOut);
-            emit Resolved(_id, true);
+            recipient = p.freelancer;
         } else {
-            _send(p.paymentToken, p.client, amount);
-            if (yieldOut > 0) _distributeYield(_id, p.paymentToken, yieldOut);
-            emit Resolved(_id, false);
+            recipient = p.client;
         }
+        if (amount > 0) {
+            uint256 fee = (amount * PLATFORM_FEE_BPS) / BPS;
+            uint256 netAmount = amount - fee;
+            if (fee > 0) _send(p.paymentToken, treasury, fee);
+            _send(p.paymentToken, recipient, netAmount);
+        }
+        if (yieldOut > 0) _distributeYield(_id, p.paymentToken, yieldOut);
+        emit Resolved(_id, approvedCount * 2 > p.milestones.length);
     }
 
     function cancelProject(uint256 _id) external nonReentrant onlyClient(_id) {

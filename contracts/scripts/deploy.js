@@ -15,7 +15,7 @@ async function main() {
   const CHAINLINK_FEEDS = {
     amoy: "0x001382149eBa3441043c1c66972b4772963f5D43", // POL/USD
     arbitrumSepolia: "0x26dA680D98e805D54f0934f46b4669149c14d1cA", // ETH/USD
-    baseSepolia: "0x4aDC67696bA383F43DD60A9e78F2C97F4fcF617b", // ETH/USD
+    baseSepolia: "0x4Adc67696BA383F43dD60a9e78F2C97F4FcF617B", // ETH/USD
   };
   const PRICE_FEED = CHAINLINK_FEEDS[networkName] || CHAINLINK_FEEDS.amoy;
 
@@ -98,6 +98,39 @@ async function main() {
   await digitalRWA.waitForDeployment();
   deployed.digitalRWA = await digitalRWA.getAddress();
   console.log("  ->", deployed.digitalRWA);
+
+  // 8. Post-deploy configuration
+  console.log("\n[8/8] Post-deploy configuration...");
+
+  // Allow USDC + USDT on DigitalGoods
+  const dg = await hre.ethers.getContractAt("DigitalGoods", deployed.digitalGoods);
+  await dg.setTokenAllowed(deployed.mockUSDC, true);
+  await dg.setTokenAllowed(deployed.mockUSDT, true);
+  console.log("  DigitalGoods: USDC + USDT allowed");
+
+  // Allow USDC + USDT on FreelancerEscrow
+  const fe = await hre.ethers.getContractAt("FreelancerEscrow", deployed.freelancerEscrow);
+  await fe.setTokenAllowed(deployed.mockUSDC, true);
+  await fe.setTokenAllowed(deployed.mockUSDT, true);
+  console.log("  FreelancerEscrow: USDC + USDT allowed");
+
+  // Link FeeDistributor
+  const feeDist = await hre.ethers.getContractAt("FeeDistributor", deployed.feeDistributor);
+  // yieldVault set later if needed
+
+  // Link FreelancerEscrow to FeeDistributor
+  await fe.setFeeDistributor(deployed.feeDistributor);
+  console.log("  FreelancerEscrow: linked to FeeDistributor");
+
+  // Sync DigitalRWA price
+  const rwa = await hre.ethers.getContractAt("DigitalRWA", deployed.digitalRWA);
+  try {
+    await rwa.syncPrice();
+    const price = await rwa.currentPrice();
+    console.log("  DigitalRWA: price synced =", hre.ethers.formatUnits(price, 8));
+  } catch (e) {
+    console.log("  DigitalRWA: syncPrice skipped —", e.message?.slice(0, 80));
+  }
 
   // Summary
   console.log("\n============================================");

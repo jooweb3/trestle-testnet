@@ -227,8 +227,9 @@ describe("Trestle Protocol — Heavy Test Suite", function () {
 
     it("subscribe with MATIC when whitelisted", async function () {
       await govToken.connect(deployer).transfer(user.address, ethers.parseEther("100"));
+      await digitalRWA.connect(deployer).syncPrice();
       await digitalRWA.connect(user).subscribe({ value: ethers.parseEther("5") });
-      expect(await digitalRWA.balanceOf(user.address)).to.equal(ethers.parseEther("5"));
+      expect(await digitalRWA.balanceOf(user.address)).to.equal(ethers.parseEther("5000"));
     });
 
     it("revert subscribe when not whitelisted", async function () {
@@ -244,6 +245,7 @@ describe("Trestle Protocol — Heavy Test Suite", function () {
 
     it("withdrawETH by admin", async function () {
       await govToken.connect(deployer).transfer(user.address, ethers.parseEther("100"));
+      await digitalRWA.connect(deployer).syncPrice();
       await digitalRWA.connect(user).subscribe({ value: ethers.parseEther("10") });
       await digitalRWA.connect(deployer).withdrawETH(user.address, ethers.parseEther("5"));
       expect(await ethers.provider.getBalance(user.address)).to.be.gt(0);
@@ -251,6 +253,7 @@ describe("Trestle Protocol — Heavy Test Suite", function () {
 
     it("sweepETH by admin", async function () {
       await govToken.connect(deployer).transfer(user.address, ethers.parseEther("100"));
+      await digitalRWA.connect(deployer).syncPrice();
       await digitalRWA.connect(user).subscribe({ value: ethers.parseEther("10") });
       const balBefore = await ethers.provider.getBalance(treasury.address);
       await digitalRWA.connect(deployer).sweepETH(treasury.address);

@@ -115,8 +115,11 @@ contract DigitalRWA is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Reent
     function subscribe() external payable nonReentrant {
         if (msg.value == 0) revert InsufficientBalance();
         if (!isWhitelisted(msg.sender)) revert NotWhitelisted();
-        if (totalSupply() + msg.value > cap) revert CapExceeded();
-        _mint(msg.sender, msg.value);
+        if (currentPrice == 0) revert InvalidPrice();
+        uint256 tokensToMint = (msg.value * currentPrice) / 1e8;
+        if (tokensToMint == 0) revert InsufficientBalance();
+        if (totalSupply() + tokensToMint > cap) revert CapExceeded();
+        _mint(msg.sender, tokensToMint);
     }
 
     function withdrawETH(address payable _to, uint256 _amount) external onlyRole(DEFAULT_ADMIN_ROLE) nonReentrant {
