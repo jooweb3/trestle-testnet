@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
+pragma solidity ^0.8.36;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
@@ -18,6 +18,9 @@ contract DigitalGoods is Ownable, ReentrancyGuard {
         uint256 id;
         address seller;
         string metadataURI;
+        string description;
+        string tags;
+        bool isNFT;
         PricingMode pricing;
         uint256 price;
         DutchAuctionLib.Params auction;
@@ -40,6 +43,7 @@ contract DigitalGoods is Ownable, ReentrancyGuard {
     address public treasury;
     mapping(uint256 => Listing) public listings;
     mapping(uint256 => string) public deliveryHashes;
+    mapping(address => bool) public allowedTokens;
 
     event Listed(uint256 indexed id, address indexed seller, PricingMode pricing, uint256 price, string metadataURI, string category);
     event Purchased(uint256 indexed id, address indexed buyer, uint256 paid);
@@ -49,6 +53,7 @@ contract DigitalGoods is Ownable, ReentrancyGuard {
     event Resolved(uint256 indexed id, bool toBuyer);
     event Cancelled(uint256 indexed id);
     event TreasuryUpdated(address indexed newTreasury);
+    event TokenAllowed(address indexed token, bool allowed);
 
     error NotSeller();
     error NotBuyer();
@@ -58,10 +63,17 @@ contract DigitalGoods is Ownable, ReentrancyGuard {
     error NoRefundNeeded();
     error ZeroAddress();
     error TransferFailed();
+    error TokenNotAllowed();
 
     constructor(address _treasury) Ownable(msg.sender) {
         if (_treasury == address(0)) revert ZeroAddress();
         treasury = _treasury;
+    }
+
+    function setTokenAllowed(address _token, bool _allowed) external onlyOwner {
+        if (_token == address(0)) revert ZeroAddress();
+        allowedTokens[_token] = _allowed;
+        emit TokenAllowed(_token, _allowed);
     }
 
     function setTreasury(address _treasury) external onlyOwner {
@@ -72,16 +84,22 @@ contract DigitalGoods is Ownable, ReentrancyGuard {
 
     function listFixed(
         string calldata _metadataURI,
+        string calldata _description,
+        string calldata _tags,
+        bool _isNFT,
         uint256 _price,
         string calldata _category,
         string calldata _deliveryURI
     ) external returns (uint256) {
         if (_price == 0) revert PriceTooLow();
-        return _list(_metadataURI, PricingMode.Fixed, _price, 0, 0, 0, _category, _deliveryURI);
+        return _list(_metadataURI, _description, _tags, _isNFT, PricingMode.Fixed, _price, 0, 0, 0, _category, _deliveryURI);
     }
 
     function listDutch(
         string calldata _metadataURI,
+        string calldata _description,
+        string calldata _tags,
+        bool _isNFT,
         uint256 _startPrice,
         uint256 _reservePrice,
         uint256 _duration,
@@ -89,11 +107,14 @@ contract DigitalGoods is Ownable, ReentrancyGuard {
         string calldata _deliveryURI
     ) external returns (uint256) {
         DutchAuctionLib.validate(_startPrice, _reservePrice, _duration);
-        return _list(_metadataURI, PricingMode.DutchAuction, _startPrice, _reservePrice, _duration, block.timestamp, _category, _deliveryURI);
+        return _list(_metadataURI, _description, _tags, _isNFT, PricingMode.DutchAuction, _startPrice, _reservePrice, _duration, block.timestamp, _category, _deliveryURI);
     }
 
     function _list(
         string calldata _metadataURI,
+        string calldata _description,
+        string calldata _tags,
+        bool _isNFT,
         PricingMode _pricing,
         uint256 _price,
         uint256 _reservePrice,
@@ -108,6 +129,9 @@ contract DigitalGoods is Ownable, ReentrancyGuard {
             id: id,
             seller: msg.sender,
             metadataURI: _metadataURI,
+            description: _description,
+            tags: _tags,
+            isNFT: _isNFT,
             pricing: _pricing,
             price: _price,
             auction: DutchAuctionLib.Params(_price, _reservePrice, _duration, _startedAt),
@@ -161,6 +185,7 @@ contract DigitalGoods is Ownable, ReentrancyGuard {
     }
 
     function buyWithToken(uint256 _id, address _token, uint256 _amount) external nonReentrant {
+        if (!allowedTokens[_token]) revert TokenNotAllowed();
         Listing storage l = listings[_id];
         if (l.status != ListingStatus.Active) revert WrongStatus();
         if (msg.sender == l.seller) revert WrongStatus();
@@ -208,6 +233,7 @@ contract DigitalGoods is Ownable, ReentrancyGuard {
         Listing storage l = listings[_id];
         if (msg.sender != l.buyer && msg.sender != l.seller) revert WrongStatus();
         if (l.status != ListingStatus.Sold || l.deliveryConfirmed) revert WrongStatus();
+        if (block.timestamp > l.disputeDeadline) revert WrongStatus();
 
         l.status = ListingStatus.Disputed;
         emit Disputed(_id);
@@ -215,6 +241,7 @@ contract DigitalGoods is Ownable, ReentrancyGuard {
 
     function resolveAfterTimeout(uint256 _id) external nonReentrant {
         Listing storage l = listings[_id];
+        if (msg.sender != l.buyer && msg.sender != l.seller) revert WrongStatus();
         if (l.status != ListingStatus.Disputed && l.status != ListingStatus.Sold) revert WrongStatus();
         if (l.deliveryConfirmed) revert AlreadyConfirmed();
         if (block.timestamp < l.disputeDeadline) revert WrongStatus();

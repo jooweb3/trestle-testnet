@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
+pragma solidity ^0.8.36;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
@@ -15,6 +15,10 @@ contract DigitalRWA is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Reent
     struct AssetInfo {
         string name;
         string description;
+        string tokenType;
+        string jurisdiction;
+        string issuer;
+        string riskLevel;
         uint256 lockupDuration;
         uint256 expectedReturnBps;
         string underlyingAsset;
@@ -22,7 +26,7 @@ contract DigitalRWA is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Reent
         uint256 redemptionPrice;
     }
 
-    bytes32 public metadataURI;
+    string public metadataURI;
     uint256 public immutable cap;
     AssetInfo public assetInfo;
     bool public assetInfoSet;
@@ -36,7 +40,7 @@ contract DigitalRWA is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Reent
 
     mapping(address => bool) public manualWhitelist;
 
-    event MetadataUpdated(bytes32 indexed uri);
+    event MetadataUpdated(string uri);
     event Whitelisted(address indexed account, bool indexed status);
     event AssetInfoUpdated(AssetInfo info);
     event PriceUpdated(uint256 price, uint256 timestamp);
@@ -56,7 +60,7 @@ contract DigitalRWA is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Reent
     constructor(
         string memory _name,
         string memory _symbol,
-        bytes32 _metadataURI,
+        string memory _metadataURI,
         uint256 _cap,
         address _owner,
         address _govToken,
@@ -135,7 +139,7 @@ contract DigitalRWA is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Reent
         emit WhitelistTokenUpdated(_token, _minBalance);
     }
 
-    function setMetadataURI(bytes32 _uri) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setMetadataURI(string calldata _uri) external onlyRole(DEFAULT_ADMIN_ROLE) {
         metadataURI = _uri;
         emit MetadataUpdated(_uri);
     }
@@ -143,6 +147,10 @@ contract DigitalRWA is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Reent
     function setAssetInfo(
         string calldata _name,
         string calldata _description,
+        string calldata _tokenType,
+        string calldata _jurisdiction,
+        string calldata _issuer,
+        string calldata _riskLevel,
         uint256 _lockupDuration,
         uint256 _expectedReturnBps,
         string calldata _underlyingAsset,
@@ -151,8 +159,8 @@ contract DigitalRWA is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Reent
     ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         if (assetInfoSet) revert AssetInfoAlreadySet();
         assetInfo = AssetInfo(
-            _name, _description, _lockupDuration,
-            _expectedReturnBps, _underlyingAsset,
+            _name, _description, _tokenType, _jurisdiction, _issuer, _riskLevel,
+            _lockupDuration, _expectedReturnBps, _underlyingAsset,
             _redemptionDate, _redemptionPrice
         );
         assetInfoSet = true;
