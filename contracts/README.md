@@ -31,20 +31,20 @@ Hardhat project with Solidity smart contracts for the Trestle DeFi Marketplace.
 
 **Chainlink ETH/USD (Base Sepolia):** `0x4aDC67696bA383F43DD60A9e78F2C97Fbbfc7cb1`
 
-## Deployed — Arbitrum Sepolia (421614)
+## Deployed — Arbitrum Sepolia (421614) — All verified (post-fix)
 
 | Contract | Address | Explorer |
 |----------|---------|----------|
-| MockGovernanceToken | `0x13A40Cea2156984B54fd337c51B6a5B47d569C2C` | [View](https://sepolia.arbiscan.io/address/0x13A40Cea2156984B54fd337c51B6a5B47d569C2C#code) |
-| FeeDistributor | `0x93b1152F710d325154bF7A095c7509DA173DA25F` | [View](https://sepolia.arbiscan.io/address/0x93b1152F710d325154bF7A095c7509DA173DA25F#code) |
-| DigitalGoods | `0x479832CE889A41d57b8f9ACb3E191F08eA6e5856` | [View](https://sepolia.arbiscan.io/address/0x479832CE889A41d57b8f9ACb3E191F08eA6e5856#code) |
-| FreelancerEscrow | `0xB0aAcF8b6345f3342781d1A3D995D84375DB7d8E` | [View](https://sepolia.arbiscan.io/address/0xB0aAcF8b6345f3342781d1A3D995D84375DB7d8E#code) |
-| DigitalRWA | `0xB2a759C6FB0076FBBe3EEae20975537a999091bA` | [View](https://sepolia.arbiscan.io/address/0xB2a759C6FB0076FBBe3EEae20975537a999091bA#code) |
-| UserProfile | `0x812b404524EaFA0540C4BE773a14176bdFdC1B7E` | [View](https://sepolia.arbiscan.io/address/0x812b404524EaFA0540C4BE773a14176bdFdC1B7E#code) |
-| Mock USDC | `0x917E41b870708dea08Ab237E153ad72aF62FFc34` | [View](https://sepolia.arbiscan.io/address/0x917E41b870708dea08Ab237E153ad72aF62FFc34#code) |
-| Mock USDT | `0x44E54c3F5B30e3a7D53c1cab71b99dFCC764eB9b` | [View](https://sepolia.arbiscan.io/address/0x44E54c3F5B30e3a7D53c1cab71b99dFCC764eB9b#code) |
-| Mock xNOBT | `0x692cCC86f47A0277a1550aB81BB954f39a01820E` | [View](https://sepolia.arbiscan.io/address/0x692cCC86f47A0277a1550aB81BB954f39a01820E#code) |
-| Mock xBRT | `0x8Eef8aD9d3951F6AbdB27d65299F3949E43FAe20` | [View](https://sepolia.arbiscan.io/address/0x8Eef8aD9d3951F6AbdB27d65299F3949E43FAe20#code) |
+| MockGovernanceToken | `0xA410fE4c70A624B9F8c1f65309f4FeFc1c6904E0` | [View](https://sepolia.arbiscan.io/address/0xA410fE4c70A624B9F8c1f65309f4FeFc1c6904E0#code) |
+| FeeDistributor | `0x556f8E6DC3cb93b2BF74587B6750DFf61918EAAb` | [View](https://sepolia.arbiscan.io/address/0x556f8E6DC3cb93b2BF74587B6750DFf61918EAAb#code) |
+| DigitalGoods | `0xC878166Bc446cb6Db91Dc55e9CcD1405834bc06B` | [View](https://sepolia.arbiscan.io/address/0xC878166Bc446cb6Db91Dc55e9CcD1405834bc06B#code) |
+| FreelancerEscrow | `0x612B5dda1BCBe17Dff554bb446A8018a574DBe37` | [View](https://sepolia.arbiscan.io/address/0x612B5dda1BCBe17Dff554bb446A8018a574DBe37#code) |
+| DigitalRWA | `0x4710d00AC3C2B6d0375F762076BDCE5ef835E64f` | [View](https://sepolia.arbiscan.io/address/0x4710d00AC3C2B6d0375F762076BDCE5ef835E64f#code) |
+| UserProfile | `0xBF4588E207c2191Ee9D3f114370a6dbf4BACFFf3` | [View](https://sepolia.arbiscan.io/address/0xBF4588E207c2191Ee9D3f114370a6dbf4BACFFf3#code) |
+| Mock USDC | `0xe5665d1D2F180D27d328acCBB83f5fBE32A6666A` | [View](https://sepolia.arbiscan.io/address/0xe5665d1D2F180D27d328acCBB83f5fBE32A6666A#code) |
+| Mock USDT | `0x1a112d7D350976A7b5015868F4DF3bdC8A46570d` | [View](https://sepolia.arbiscan.io/address/0x1a112d7D350976A7b5015868F4DF3bdC8A46570d#code) |
+| Mock xNOBT | `0xb0a742a2302B043718b60053b135dC432C892852` | [View](https://sepolia.arbiscan.io/address/0xb0a742a2302B043718b60053b135dC432C892852#code) |
+| Mock xBRT | `0x432aCe196DFD335396257e0CDF33B3f815b6fF0B` | [View](https://sepolia.arbiscan.io/address/0x432aCe196DFD335396257e0CDF33B3f815b6fF0B#code) |
 
 **Chainlink ETH/USD (Arb Sepolia):** `0x26dA680D98e805D54f0934f46b4669149c14d1cA`
 
