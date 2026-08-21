@@ -10,6 +10,8 @@ node_modules/
 # Build artifacts
 artifacts/
 cache/
+forge-cache/
+out/
 coverage/
 coverage.json
 typechain-types/
@@ -25,6 +27,9 @@ next-env.d.ts
 # Verification artifacts
 verify-*.json
 *-checkpoint.json
+
+# Foundry
+foundry.toml.bak
 
 # OS
 .DS_Store

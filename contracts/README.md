@@ -48,20 +48,20 @@ Hardhat project with Solidity smart contracts for the Trestle DeFi Marketplace.
 
 **Chainlink ETH/USD (Arb Sepolia):** `0x26dA680D98e805D54f0934f46b4669149c14d1cA`
 
-## Deployed — Polygon Amoy (80002)
+## Deployed — Polygon Amoy (80002) — All verified (post-fix)
 
 | Contract | Address | Explorer |
 |----------|---------|----------|
-| MockGovernanceToken | `0x5582496273a71E60e457D19773050CC848A2F52C` | [View](https://amoy.polygonscan.com/address/0x5582496273a71E60e457D19773050CC848A2F52C) |
-| FeeDistributor | `0xa1889d658601c7fA649a70516341fF4aac761ca8` | [View](https://amoy.polygonscan.com/address/0xa1889d658601c7fA649a70516341fF4aac761ca8) |
-| DigitalGoods | `0xcc5f9C02cD093002cE3921180e32f76cE03F01C0` | [View](https://amoy.polygonscan.com/address/0xcc5f9C02cD093002cE3921180e32f76cE03F01C0) |
-| FreelancerEscrow | `0x6baEA890Ef24F1e2dc9A5f46E7e0aeD2516BC518` | [View](https://amoy.polygonscan.com/address/0x6baEA890Ef24F1e2dc9A5f46E7e0aeD2516BC518) |
-| DigitalRWA | `0x88fB6Ae65B2c6011F4dE243BbDa100dC57Cd5FE5` | [View](https://amoy.polygonscan.com/address/0x88fB6Ae65B2c6011F4dE243BbDa100dC57Cd5FE5) |
-| UserProfile | `0x4012A59428C8A4b7f5D2ad8C0572e1da6060440c` | [View](https://amoy.polygonscan.com/address/0x4012A59428C8A4b7f5D2ad8C0572e1da6060440c) |
-| Mock USDC | `0x3944f16c03892de837f9C18Dab752Cd09dF113eF` | [View](https://amoy.polygonscan.com/address/0x3944f16c03892de837f9C18Dab752Cd09dF113eF) |
-| Mock USDT | `0x0061E989c93c38aAd363a86e1AD66875A93226d7` | [View](https://amoy.polygonscan.com/address/0x0061E989c93c38aAd363a86e1AD66875A93226d7) |
-| Mock xNOBT | `0x301C0CD35e76Ae3956f6410b46D2aD0E3f60Bd5B` | [View](https://amoy.polygonscan.com/address/0x301C0CD35e76Ae3956f6410b46D2aD0E3f60Bd5B) |
-| Mock xBRT | `0xAe743AC8eBE1fe05114bB82F68b51A9a2BabD9Df` | [View](https://amoy.polygonscan.com/address/0xAe743AC8eBE1fe05114bB82F68b51A9a2BabD9Df) |
+| MockGovernanceToken | `0x81C11612df53Bf2564CFDEc7C7E11407db6E10Ce` | [View](https://amoy.polygonscan.com/address/0x81C11612df53Bf2564CFDEc7C7E11407db6E10Ce#code) |
+| FeeDistributor | `0x090AAe945842f7bf73533776B226B2979293f709` | [View](https://amoy.polygonscan.com/address/0x090AAe945842f7bf73533776B226B2979293f709#code) |
+| DigitalGoods | `0x0790bB1Ee4ee086C2610346E2290B38BC75Ac347` | [View](https://amoy.polygonscan.com/address/0x0790bB1Ee4ee086C2610346E2290B38BC75Ac347#code) |
+| FreelancerEscrow | `0x2Ad9fFCBC6453B2b7A458bD80747c202F188606D` | [View](https://amoy.polygonscan.com/address/0x2Ad9fFCBC6453B2b7A458bD80747c202F188606D#code) |
+| DigitalRWA | `0xD63A90d82Fc8c74FbBbE3d9b0516d79985Fe0d71` | [View](https://amoy.polygonscan.com/address/0xD63A90d82Fc8c74FbBbE3d9b0516d79985Fe0d71#code) |
+| UserProfile | `0xC36C239D0b3144015178727f939e0766Bf71D816` | [View](https://amoy.polygonscan.com/address/0xC36C239D0b3144015178727f939e0766Bf71D816#code) |
+| Mock USDC | `0x6D6C679279f5C680e5a6ef33306F2e9A78577DCa` | [View](https://amoy.polygonscan.com/address/0x6D6C679279f5C680e5a6ef33306F2e9A78577DCa#code) |
+| Mock USDT | `0x58E3B6f2eFD7F3ee4afe98A754e155DBE9052513` | [View](https://amoy.polygonscan.com/address/0x58E3B6f2eFD7F3ee4afe98A754e155DBE9052513#code) |
+| Mock xNOBT | `0x4eC3777B16FC7Da556B451679A10A8fDFC5Fd48D` | [View](https://amoy.polygonscan.com/address/0x4eC3777B16FC7Da556B451679A10A8fDFC5Fd48D#code) |
+| Mock xBRT | `0xA8fb99180AdfFD8d0986A32f472faD2A17B57D7D` | [View](https://amoy.polygonscan.com/address/0xA8fb99180AdfFD8d0986A32f472faD2A17B57D7D#code) |
 
 **Chainlink ETH/USD (Polygon Amoy):** `0x001382149eBa3441043c1c66972b4772963f5D43`
 
@@ -87,18 +87,20 @@ npx hardhat test
 
 ## Deploy
 
+Deployment follows a resumable pipeline strategy (dual RPC endpoints, batch checkpointing, deterministic addresses). See `best-deploy-contract.md` for infrastructure notes.
+
 ```bash
 # Deploy to Base Sepolia
-npx hardhat run scripts/deploy_v2.js --network baseSepolia
+npx hardhat run scripts/deploy.js --network baseSepolia
 
 # Deploy to Arbitrum Sepolia
-npx hardhat run scripts/deploy_v2.js --network arbitrumSepolia
+npx hardhat run scripts/deploy.js --network arbitrumSepolia
 
 # Deploy to Polygon Amoy
-npx hardhat run scripts/deploy_v2.js --network amoy
+npx hardhat run scripts/deploy.js --network amoy
 
 # Deploy to Base Mainnet
-npx hardhat run scripts/deploy_v2.js --network base
+npx hardhat run scripts/deploy.js --network base
 ```
 
 The deploy script auto-detects chain ID and selects the correct:

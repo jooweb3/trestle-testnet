@@ -3,6 +3,10 @@ artifacts/
 cache/
 typechain-types/
 
+# Foundry
+out/
+forge-cache/
+
 # Environment
 .env
 

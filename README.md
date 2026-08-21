@@ -55,6 +55,23 @@ All verified on [Basescan Sepolia](https://sepolia.basescan.org). RWA price orac
 
 All verified on [Arbiscan Sepolia](https://sepolia.arbiscan.io). RWA price oracle: Chainlink ETH/USD (`0x26dA680D98e805D54f0934f46b4669149c14d1cA`).
 
+### Polygon Amoy Deployments (post-fix, all verified)
+
+| Contract | Address |
+|----------|---------|
+| **DigitalGoods** | `0x0790bB1Ee4ee086C2610346E2290B38BC75Ac347` |
+| **FreelancerEscrow** | `0x2Ad9fFCBC6453B2b7A458bD80747c202F188606D` |
+| **DigitalRWA** | `0xD63A90d82Fc8c74FbBbE3d9b0516d79985Fe0d71` |
+| **FeeDistributor** | `0x090AAe945842f7bf73533776B226B2979293f709` |
+| **GovernanceToken (tGOV)** | `0x81C11612df53Bf2564CFDEc7C7E11407db6E10Ce` |
+| **MockUSDC** | `0x6D6C679279f5C680e5a6ef33306F2e9A78577DCa` |
+| **MockUSDT** | `0x58E3B6f2eFD7F3ee4afe98A754e155DBE9052513` |
+| **MockXNOBT** | `0x4eC3777B16FC7Da556B451679A10A8fDFC5Fd48D` |
+| **MockXBRT** | `0xA8fb99180AdfFD8d0986A32f472faD2A17B57D7D` |
+| **UserProfile** | `0xC36C239D0b3144015178727f939e0766Bf71D816` |
+
+All verified on [Polygonscan Amoy](https://amoy.polygonscan.com). RWA price oracle: Chainlink POL/USD (`0x001382149eBa3441043c1c66972b4772963f5D43`).
+
 ## Features
 
 - **Marketplace**: fixed & Dutch listings with description, tags, and NFT flag; native (ETH/POL), USDC, and USDT payments via an owner-set token allowlist.
