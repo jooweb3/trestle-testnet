@@ -176,7 +176,7 @@ export default function RWA() {
         <strong>RWA Guide:</strong> Assets are whitelist-gated for compliance.
         1) Go to <strong>Faucet</strong> and mint <strong>1000 USDC</strong>.
         2) Hold 1000+ USDC — you are automatically whitelisted (token-gated).
-        3) Use <strong>Subscribe</strong> to mint DA1 tokens by sending POL (1 POL = 1 DA1, minimum ~0.00001 POL).
+        3) <strong>Sync Price</strong> from Chainlink first — then use <strong>Subscribe</strong> to mint DA1 at oracle price: <code className="bg-blue-100 px-1 rounded">tokens = (value × currentPrice)/1e8</code> (e.g. 5 {chainCurrency} × ~$3000 = ~15000 DA1).
         Token holders earn yield and can redeem at the redemption date.
       </div>
 
@@ -248,15 +248,18 @@ export default function RWA() {
         <p className="text-[10px] text-gray-400 mt-3">Anyone can sync the price from Chainlink. No admin needed.</p>
       </div>
 
-      {/* Subscribe */}
+      {/* Subscribe — oracle-priced: DigitalRWA.sol:115-122 */}
       {rwaReady && whitelisted === true && !isAdmin && (
         <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
-          <h3 className="font-semibold text-gray-900">Subscribe</h3>
-          <p className="text-xs text-gray-500">Send POL to mint RWA tokens (1 POL = 1 DA1)</p>
+          <h3 className="font-semibold text-gray-900">Subscribe (Oracle-Priced)</h3>
+          <p className="text-xs text-gray-500">Send {chainCurrency} to mint DA1 at Chainlink price — <code className="bg-gray-100 px-1 rounded">tokens = value × {currentPrice ? formatUnits(currentPrice as bigint, 8) : "—"} / 1e8</code></p>
+          {(!currentPrice || (currentPrice as bigint) === 0n) && (
+            <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg p-2">Price not synced — click <strong>Sync Price</strong> above before subscribing (reverts with <code>InvalidPrice</code>).</p>
+          )}
           <div className="flex gap-2">
             <input value={subAmount} onChange={e => setSubAmount(e.target.value)} type="number" min="0" placeholder={`${chainCurrency} amount`} className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm" />
-            <button onClick={handleSubscribe} disabled={busy || !rwaReady} className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg transition">
-              {busy ? "..." : "Buy DA1"}
+            <button onClick={handleSubscribe} disabled={busy || !rwaReady || !currentPrice || (currentPrice as bigint) === 0n} className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg transition">
+              {busy ? "..." : subAmount && currentPrice ? `Buy ~${formatUnits((parseUnits(subAmount || "0", 18) * (currentPrice as bigint)) / BigInt(1e8), 18)} DA1` : "Buy DA1"}
             </button>
           </div>
         </div>

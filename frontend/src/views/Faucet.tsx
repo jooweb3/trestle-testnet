@@ -23,8 +23,16 @@ export default function Faucet() {
   const [error, setError] = useState("");
   const [amounts, setAmounts] = useState<Record<string, string>>({});
 
+  // tGOV now onlyOwner (MockGovernanceToken.sol:20) — hide for non-owners, handled via owner check below
+  const govOwner = useReadContracts({
+    contracts: govTokenAddr ? [{ abi: [{ inputs: [], name: "owner", outputs: [{ name: "", type: "address" }], stateMutability: "view", type: "function" }], address: govTokenAddr as Address, functionName: "owner", args: [] }] : [],
+    query: { enabled: !!govTokenAddr && govTokenAddr !== "0x0000000000000000000000000000000000000000" },
+  } as any);
+  const govOwnerAddr = (govOwner.data?.[0]?.result as string | undefined)?.toLowerCase();
+  const isGovOwner = address && govOwnerAddr && address.toLowerCase() === govOwnerAddr;
+
   const TOKENS = [
-    { id: "tGOV", name: "tGOV", addr: govTokenAddr, desc: "Governance token", decimals: 18, default: "100" },
+    ...(isGovOwner ? [{ id: "tGOV", name: "tGOV", addr: govTokenAddr, desc: "Governance token (owner only)", decimals: 18, default: "100" }] : []),
     { id: "USDC", name: "USDC", addr: mockUSDCAddr, desc: "Mock USD Coin", decimals: 6, default: "1000" },
     { id: "USDT", name: "USDT", addr: mockUSDTAddr, desc: "Mock Tether USD", decimals: 6, default: "1000" },
     { id: "xNOBT", name: "xNOBT", addr: mockXNOBTAddr, desc: "Testnet NOBT", decimals: 18, default: "1000" },
