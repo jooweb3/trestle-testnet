@@ -76,8 +76,9 @@ export default function RWA() {
     abi: rwaABI, address: rwaAddr, functionName: "assetInfo",
     query: { enabled: rwaReady },
   });
-  const { data: owner } = useReadContract({
-    abi: rwaABI, address: rwaAddr, functionName: "owner",
+  const { data: isAdminRole } = useReadContract({
+    abi: rwaABI, address: rwaAddr, functionName: "hasRole",
+    args: ["0x0000000000000000000000000000000000000000000000000000000000000000", address as `0x${string}`],
     query: { enabled: rwaReady },
   });
   const { data: currentPrice } = useReadContract({
@@ -93,7 +94,7 @@ export default function RWA() {
     query: { enabled: rwaReady },
   });
 
-  const isAdmin = address && owner && address.toLowerCase() === (owner as string).toLowerCase();
+  const isAdmin = Boolean(address && isAdminRole);
   const info = parseAssetInfo(assetInfo) || EXAMPLE_INFO;
 
   async function handleSubscribe() {

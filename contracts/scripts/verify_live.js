@@ -3,7 +3,7 @@ const hre = require("hardhat");
 const CONTRACTS = {
   DigitalGoods:       "0x272475feaD659100E6DD8EBd8dB88E6f064DC112",
   FreelancerEscrow:   "0x6A08C1eE8102B41935a758b5E3093b075113E615",
-  DigitalRWA:         "0x18dF08d96F303c6149a7f8CC4800BCa7fcAEB0Fd",
+  DigitalRWA:         "0xA410fE4c70A624B9F8c1f65309f4FeFc1c6904E0",
   FeeDistributor:     "0x754C549355215022453bDd9Cd19Cbc7b52B1E490",
   GovernanceToken:    "0x50915a301fF73278B3eaC09B42301abbC866F1Dc",
   MockUSDC:           "0xfe50dA41BfC13e99E9276149D0b534609C39633E",

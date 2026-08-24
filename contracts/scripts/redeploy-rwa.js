@@ -34,10 +34,7 @@ const MANUAL_PRICES = {
   baseSepolia: 300000000000n, // $3000 ETH/USD (8 decimals)
 };
 
-const RWA_META = [
-  "Trestle Real Asset 1", "Tokenized real-world asset with revenue share",
-  "RWA", "USA", "Trestle", "Medium", "Real Estate Fund",
-];
+const RWA_META = "ipfs://QmPlaceholder";
 
 async function main() {
   const [deployer] = await hre.ethers.getSigners();
@@ -81,7 +78,21 @@ async function main() {
   const usdtOk = await rwa.whitelistTokens(cfg.mockUSDT);
   console.log("\nSanity: currentPrice =", price.toString(), "| USDT minBalance =", usdtOk.toString());
   if (price === 0n) throw new Error("currentPrice still zero!");
-  console.log("\nDONE. Next: npx hardhat verify --network", networkName, addr, `'["Trestle Real Asset 1","TRA1",...]' — see README or use verify script`);
+  const verifyArgs = `npx hardhat verify --network ${networkName} ${addr} "Trestle Real Asset 1" "TRA1" "${RWA_META}" ${GOV_SUPPLY} ${deployer.address} ${cfg.mockUSDC} ${MIN_WHITELIST_BALANCE} ${CHAINLINK_FEEDS[networkName]}`;
+  console.log("\nVerify with:\n  " + verifyArgs);
+  try {
+    await hre.run("verify:verify", {
+      network: networkName,
+      address: addr,
+      constructorArguments: [
+        "Trestle Real Asset 1", "TRA1", RWA_META, GOV_SUPPLY,
+        deployer.address, cfg.mockUSDC, MIN_WHITELIST_BALANCE, CHAINLINK_FEEDS[networkName],
+      ],
+    });
+    console.log("✅ verified on explorer");
+  } catch (e) {
+    console.log("verify failed (can retry manually):", e.message?.slice(0, 120));
+  }
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

@@ -41,7 +41,7 @@ const RWA_ABI = [
   { inputs: [{ name: "token", type: "address" }, { name: "minBalance", type: "uint256" }], name: "setWhitelistToken", outputs: [], stateMutability: "nonpayable", type: "function" },
   { inputs: [], name: "assetInfo", outputs: [{ name: "name", type: "string" }, { name: "description", type: "string" }, { name: "tokenType", type: "string" }, { name: "jurisdiction", type: "string" }, { name: "issuer", type: "string" }, { name: "riskLevel", type: "string" }, { name: "lockupDuration", type: "uint256" }, { name: "expectedReturnBps", type: "uint256" }, { name: "underlyingAsset", type: "string" }, { name: "redemptionDate", type: "uint256" }, { name: "redemptionPrice", type: "uint256" }], stateMutability: "view", type: "function" },
   { inputs: [], name: "cap", outputs: [{ name: "", type: "uint256" }], stateMutability: "view", type: "function" },
-  { inputs: [], name: "owner", outputs: [{ name: "", type: "address" }], stateMutability: "view", type: "function" },
+  { inputs: [{ name: "role", type: "bytes32" }, { name: "account", type: "address" }], name: "hasRole", outputs: [{ name: "", type: "bool" }], stateMutability: "view", type: "function" },
   { inputs: [], name: "subscribe", outputs: [], stateMutability: "payable", type: "function" },
   { inputs: [], name: "syncPrice", outputs: [], stateMutability: "nonpayable", type: "function" },
   { inputs: [{ name: "_price", type: "uint256" }], name: "setManualPrice", outputs: [], stateMutability: "nonpayable", type: "function" },

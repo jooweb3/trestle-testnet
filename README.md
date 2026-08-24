@@ -27,7 +27,7 @@ Deployed addresses are maintained in `frontend/src/config/contracts.ts` (`CONTRA
 |----------|---------|
 | **DigitalGoods** | `0x272475feaD659100E6DD8EBd8dB88E6f064DC112` |
 | **FreelancerEscrow** | `0x6A08C1eE8102B41935a758b5E3093b075113E615` |
-| **DigitalRWA** | `0x18dF08d96F303c6149a7f8CC4800BCa7fcAEB0Fd` |
+| **DigitalRWA** | `0xA410fE4c70A624B9F8c1f65309f4FeFc1c6904E0` |
 | **FeeDistributor** | `0x754C549355215022453bDd9Cd19Cbc7b52B1E490` |
 | **GovernanceToken (tGOV)** | `0x50915a301fF73278B3eaC09B42301abbC866F1Dc` |
 | **UserProfile** | `0xdd89E04e5bB9B79775A87Fa9666C5Fe03a01e169` |
@@ -36,7 +36,7 @@ Deployed addresses are maintained in `frontend/src/config/contracts.ts` (`CONTRA
 | **MockXNOBT** | `0x4cEaa30839E3E463484c2D66900fdD6484022054` |
 | **MockXBRT** | `0xbA3B12F5633da2794c97CF330B19E510aE2BbB05` |
 
-All verified on [Basescan Sepolia](https://sepolia.basescan.org). RWA price oracle: Chainlink ETH/USD (`0x4Adc67696BA383F43dD60a9e78F2C97F4FcF617B`).
+All verified on [Basescan Sepolia](https://sepolia.basescan.org). RWA pricing: Chainlink testnet feeds are deprecated (see [Shutdown Policy](https://docs.chain.link/data-feeds/selecting-data-feeds#data-feed-shutdown-policy)); price set via admin `setManualPrice()` ($3000 ETH/USD), `syncPrice()` remains primary if a live feed returns.
 
 ### Arbitrum Sepolia Deployments (post-fix, all verified)
 
@@ -44,7 +44,7 @@ All verified on [Basescan Sepolia](https://sepolia.basescan.org). RWA price orac
 |----------|---------|
 | **DigitalGoods** | `0xC878166Bc446cb6Db91Dc55e9CcD1405834bc06B` |
 | **FreelancerEscrow** | `0x612B5dda1BCBe17Dff554bb446A8018a574DBe37` |
-| **DigitalRWA** | `0x4710d00AC3C2B6d0375F762076BDCE5ef835E64f` |
+| **DigitalRWA** | `0xa1889d658601c7fA649a70516341fF4aac761ca8` |
 | **FeeDistributor** | `0x556f8E6DC3cb93b2BF74587B6750DFf61918EAAb` |
 | **GovernanceToken (tGOV)** | `0xA410fE4c70A624B9F8c1f65309f4FeFc1c6904E0` |
 | **UserProfile** | `0xBF4588E207c2191Ee9D3f114370a6dbf4BACFFf3` |
@@ -53,7 +53,7 @@ All verified on [Basescan Sepolia](https://sepolia.basescan.org). RWA price orac
 | **MockXNOBT** | `0xb0a742a2302B043718b60053b135dC432C892852` |
 | **MockXBRT** | `0x432aCe196DFD335396257e0CDF33B3f815b6fF0B` |
 
-All verified on [Arbiscan Sepolia](https://sepolia.arbiscan.io). RWA price oracle: Chainlink ETH/USD (`0x26dA680D98e805D54f0934f46b4669149c14d1cA`).
+All verified on [Arbiscan Sepolia](https://sepolia.arbiscan.io). RWA pricing: manual `setManualPrice()` fallback ($3000 ETH/USD) — no classic Chainlink feeds remain on this testnet.
 
 ### Polygon Amoy Deployments (post-fix, all verified)
 
@@ -61,7 +61,7 @@ All verified on [Arbiscan Sepolia](https://sepolia.arbiscan.io). RWA price oracl
 |----------|---------|
 | **DigitalGoods** | `0x0790bB1Ee4ee086C2610346E2290B38BC75Ac347` |
 | **FreelancerEscrow** | `0x2Ad9fFCBC6453B2b7A458bD80747c202F188606D` |
-| **DigitalRWA** | `0xD63A90d82Fc8c74FbBbE3d9b0516d79985Fe0d71` |
+| **DigitalRWA** | `0x9f13c49B07df04b21827Ebf00cE4b3c61d874bd2` |
 | **FeeDistributor** | `0x090AAe945842f7bf73533776B226B2979293f709` |
 | **GovernanceToken (tGOV)** | `0x81C11612df53Bf2564CFDEc7C7E11407db6E10Ce` |
 | **UserProfile** | `0xC36C239D0b3144015178727f939e0766Bf71D816` |
@@ -70,7 +70,7 @@ All verified on [Arbiscan Sepolia](https://sepolia.arbiscan.io). RWA price oracl
 | **MockXNOBT** | `0x4eC3777B16FC7Da556B451679A10A8fDFC5Fd48D` |
 | **MockXBRT** | `0xA8fb99180AdfFD8d0986A32f472faD2A17B57D7D` |
 
-All verified on [Polygonscan Amoy](https://amoy.polygonscan.com). RWA price oracle: Chainlink POL/USD (`0x001382149eBa3441043c1c66972b4772963f5D43`).
+All verified on [Polygonscan Amoy](https://amoy.polygonscan.com). RWA pricing: manual `setManualPrice()` fallback ($0.20 POL/USD) — POL/USD feed sunset; only ETH/USD remains (wrong asset for native deposits).
 
 ## Features
 

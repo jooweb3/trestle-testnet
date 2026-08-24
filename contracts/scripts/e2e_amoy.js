@@ -3,7 +3,7 @@ const { ethers } = hre;
 
 // Deployed contract addresses (Amoy, 2026-06-29 — audit fix deploy)
 const DIGITAL_GOODS = "0xfe50dA41BfC13e99E9276149D0b534609C39633E";
-const DIGITAL_RWA = "0x18dF08d96F303c6149a7f8CC4800BCa7fcAEB0Fd";
+const DIGITAL_RWA = "0xA410fE4c70A624B9F8c1f65309f4FeFc1c6904E0";
 const USER_PROFILE = "0x4cEaa30839E3E463484c2D66900fdD6484022054";
 
 const TEST_FUND = ethers.parseEther("0.06");   // MATIC sent to test user for gas + subscribe
