@@ -6,7 +6,7 @@ import { formatUnits } from "viem";
 import { getBalance } from "wagmi/actions";
 import { config } from "../config/web3";
 import { CHAIN_CONFIG } from "../config/contracts";
-import { getTransactions, getAddressInfo, getBlockscoutUrl, explorerTxUrl, type BlockscoutTx, type BlockscoutAddress } from "../lib/blockscout";
+import { getTransactions, getAddressInfo, hasIndexer, explorerTxUrl, type BlockscoutTx, type BlockscoutAddress } from "../lib/blockscout";
 
 interface ChainBalance {
   chainId: number;
@@ -27,8 +27,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!address) { setTxs(null); setAddrInfo(null); setChainBalances([]); setHasBlockscout(false); return; }
-    const bsUrl = getBlockscoutUrl(chainId);
-    if (!bsUrl) { setTxs(null); setAddrInfo(null); setBsLoading(false); setHasBlockscout(false); return; }
+    if (!hasIndexer(chainId)) { setTxs(null); setAddrInfo(null); setBsLoading(false); setHasBlockscout(false); return; }
     setHasBlockscout(true);
     setBsLoading(true);
     Promise.all([getTransactions(address, 0, chainId), getAddressInfo(address, chainId)]).then(([txData, addrData]) => {
