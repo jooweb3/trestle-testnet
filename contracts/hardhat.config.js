@@ -21,7 +21,7 @@ module.exports = {
       chainId: 31337,
     },
     amoy: {
-      url: process.env.AMOY_RPC || "https://rpc-amoy.polygon.technology/",
+      url: process.env.AMOY_RPC || "https://polygon-amoy-bor-rpc.publicnode.com",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
     polygon: {

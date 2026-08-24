@@ -44,6 +44,7 @@ const RWA_ABI = [
   { inputs: [], name: "owner", outputs: [{ name: "", type: "address" }], stateMutability: "view", type: "function" },
   { inputs: [], name: "subscribe", outputs: [], stateMutability: "payable", type: "function" },
   { inputs: [], name: "syncPrice", outputs: [], stateMutability: "nonpayable", type: "function" },
+  { inputs: [{ name: "_price", type: "uint256" }], name: "setManualPrice", outputs: [], stateMutability: "nonpayable", type: "function" },
   { inputs: [], name: "currentPrice", outputs: [{ name: "", type: "uint256" }], stateMutability: "view", type: "function" },
   { inputs: [], name: "lastPriceUpdate", outputs: [{ name: "", type: "uint256" }], stateMutability: "view", type: "function" },
   { inputs: [], name: "priceFeed", outputs: [{ name: "", type: "address" }], stateMutability: "view", type: "function" },
@@ -143,6 +144,8 @@ export function useContracts() {
       write({ abi: RWA_ABI, address: digitalRWA, functionName: "setManualWhitelist", args: [account, status] } as any),
     setWhitelistToken: (token: Address, minBalance: string) =>
       write({ abi: RWA_ABI, address: digitalRWA, functionName: "setWhitelistToken", args: [token, parseUnits(minBalance, 18)] } as any),
+    setManualPrice: (price8dec: bigint) =>
+      write({ abi: RWA_ABI, address: digitalRWA, functionName: "setManualPrice", args: [price8dec] } as any),
 
     userProfileReady: isCorrectChain,
     userProfileAddr: userProfile,

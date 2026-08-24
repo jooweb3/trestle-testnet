@@ -105,6 +105,13 @@ contract DigitalRWA is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Reent
         emit PriceUpdated(uint256(answer), block.timestamp);
     }
 
+    function setManualPrice(uint256 _price) external onlyRole(DEFAULT_ADMIN_ROLE) nonReentrant {
+        if (_price == 0) revert InvalidPrice();
+        currentPrice = _price;
+        lastPriceUpdate = block.timestamp;
+        emit PriceUpdated(_price, block.timestamp);
+    }
+
     function mint(address _to, uint256 _amount) external onlyRole(MINTER_ROLE) nonReentrant {
         if (_to == address(0) || _amount == 0) revert InvalidParams();
         if (!isWhitelisted(_to)) revert NotWhitelisted();

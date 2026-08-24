@@ -41,7 +41,7 @@ function parseAssetInfo(raw: unknown): typeof EXAMPLE_INFO | undefined {
 }
 
 export default function RWA() {
-  const { address, isConnected, rwaReady, rwaAddr, rwaABI, explorer, setWhitelistToken, chainCurrency } = useContracts();
+  const { address, isConnected, rwaReady, rwaAddr, rwaABI, explorer, setWhitelistToken, setManualPrice, chainCurrency } = useContracts();
   const { connector } = useAccount();
   const { writeContractAsync } = useWriteContract();
 
@@ -50,6 +50,7 @@ export default function RWA() {
   const [wlAddr, setWlAddr] = useState("");
   const [wlToken, setWlToken] = useState("");
   const [wlMinBal, setWlMinBal] = useState("100");
+  const [manualPrice, setManualPriceInput] = useState("3000");
   const [busy, setBusy] = useState(false);
   const [txHash, setTxHash] = useState("");
   const [txStatus, setTxStatus] = useState<TxState>("confirmed");
@@ -155,6 +156,18 @@ export default function RWA() {
     finally { setBusy(false); }
   }
 
+  async function handleSetManualPrice() {
+    if (!rwaReady || busy) return;
+    setBusy(true); setTxHash(""); setError("");
+    try {
+      const hash = await setManualPrice(parseUnits(manualPrice || "0", 8));
+      setTxHash(hash); setTxStatus("pending");
+      const receipt = await getPublicClient(config)!.waitForTransactionReceipt({ hash });
+      setTxStatus(receipt.status === "success" ? "confirmed" : "failed");
+    } catch (e: any) { console.error(e); setError(e?.shortMessage || e?.message || "Manual price update failed."); setTxStatus("failed"); }
+    finally { setBusy(false); }
+  }
+
 
   if (!isConnected) {
     return (
@@ -245,7 +258,18 @@ export default function RWA() {
             <span className="font-mono text-xs text-gray-600 break-all">{priceFeedAddr || "—"}</span>
           </div>
         </div>
-        <p className="text-[10px] text-gray-400 mt-3">Anyone can sync the price from Chainlink. No admin needed.</p>
+        <p className="text-[10px] text-gray-400 mt-3">Anyone can sync the price from Chainlink when a live feed exists. No admin needed.</p>
+        {isAdmin && (
+          <div className="mt-3 pt-3 border-t border-gray-100">
+            <label className="text-xs font-medium text-gray-600">Admin: Set Manual Price (USD, 8 dec) — fallback while testnet oracle feeds are deprecated</label>
+            <div className="flex gap-2 mt-1">
+              <input value={manualPrice} onChange={(e) => setManualPriceInput(e.target.value)} placeholder="3000" className="flex-1 px-2 py-1.5 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500" />
+              <button onClick={handleSetManualPrice} disabled={busy || !rwaReady} className="px-3 py-1.5 bg-gray-800 hover:bg-gray-900 disabled:bg-gray-300 text-white text-xs font-medium rounded-lg transition">
+                {busy ? "..." : "Set Manual Price"}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Subscribe — oracle-priced: DigitalRWA.sol:115-122 */}

@@ -185,6 +185,23 @@ describe("Trestle Protocol — Heavy Test Suite", function () {
       expect(await digitalRWA.lastPriceUpdate()).to.be.gt(0);
     });
 
+    it("setManualPrice by admin overrides price (dead-oracle fallback)", async function () {
+      await ethers.provider.send("evm_increaseTime", [3601]);
+      await ethers.provider.send("evm_mine");
+      await digitalRWA.setManualPrice(250000000n); // $2.50, 8 decimals
+      expect(await digitalRWA.currentPrice()).to.equal(250000000n);
+      expect(await digitalRWA.lastPriceUpdate()).to.be.gt(0);
+    });
+
+    it("revert setManualPrice on zero price", async function () {
+      await expect(digitalRWA.setManualPrice(0)).to.be.revertedWithCustomError(digitalRWA, "InvalidPrice");
+    });
+
+    it("revert setManualPrice for non-admin", async function () {
+      await expect(digitalRWA.connect(user).setManualPrice(100000000n))
+        .to.be.revertedWithCustomError(digitalRWA, "AccessControlUnauthorizedAccount");
+    });
+
     it("whitelist via GOV token balance", async function () {
       expect(await digitalRWA.isWhitelisted(user.address)).to.be.false;
       await govToken.connect(deployer).transfer(user.address, ethers.parseEther("100"));

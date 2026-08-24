@@ -17,6 +17,13 @@ async function main() {
     arbitrumSepolia: "0x26dA680D98e805D54f0934f46b4669149c14d1cA", // ETH/USD
     baseSepolia: "0x4Adc67696BA383F43dD60a9e78F2C97F4FcF617B", // ETH/USD
   };
+  // NOTE (2026-08): Chainlink has deprecated/sunset these testnet aggregators —
+  // syncPrice() will fail. Post-deploy below falls back to admin setManualPrice().
+  const MANUAL_PRICES = {
+    amoy: 200000000n, // $0.20 POL/USD (8 decimals)
+    arbitrumSepolia: 300000000000n, // $3000 ETH/USD (8 decimals)
+    baseSepolia: 300000000000n, // $3000 ETH/USD (8 decimals)
+  };
   const PRICE_FEED = CHAINLINK_FEEDS[networkName] || CHAINLINK_FEEDS.amoy;
 
   const deployed = {};
@@ -130,6 +137,14 @@ async function main() {
     console.log("  DigitalRWA: price synced =", hre.ethers.formatUnits(price, 8));
   } catch (e) {
     console.log("  DigitalRWA: syncPrice skipped —", e.message?.slice(0, 80));
+    // Chainlink testnet feeds are deprecated — fall back to admin manual price
+    try {
+      await rwa.setManualPrice(MANUAL_PRICES[networkName] ?? MANUAL_PRICES.amoy);
+      const price = await rwa.currentPrice();
+      console.log("  DigitalRWA: manual price set =", hre.ethers.formatUnits(price, 8), "USD");
+    } catch (e2) {
+      console.log("  DigitalRWA: setManualPrice failed —", e2.message?.slice(0, 80));
+    }
   }
 
   // Summary
