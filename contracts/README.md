@@ -29,7 +29,7 @@ Hardhat project with Solidity smart contracts for the Trestle DeFi Marketplace.
 | Mock xNOBT | `0x4cEaa30839E3E463484c2D66900fdD6484022054` | [View](https://sepolia.basescan.org/address/0x4cEaa30839E3E463484c2D66900fdD6484022054#code) |
 | Mock xBRT | `0xbA3B12F5633da2794c97CF330B19E510aE2BbB05` | [View](https://sepolia.basescan.org/address/0xbA3B12F5633da2794c97CF330B19E510aE2BbB05#code) |
 
-**Chainlink ETH/USD (Base Sepolia):** `0x4Adc67696BA383F43dD60a9e78F2C97F4FcF617B`
+**RWA pricing:** Chainlink testnet feed proxies are deprecated (Shutdown Policy); price set via admin `setManualPrice()` ($3000 ETH/USD). `syncPrice()` remains primary if a live feed returns.
 
 ## Deployed — Arbitrum Sepolia (421614) — All verified (post-fix)
 
@@ -46,7 +46,7 @@ Hardhat project with Solidity smart contracts for the Trestle DeFi Marketplace.
 | Mock xNOBT | `0xb0a742a2302B043718b60053b135dC432C892852` | [View](https://sepolia.arbiscan.io/address/0xb0a742a2302B043718b60053b135dC432C892852#code) |
 | Mock xBRT | `0x432aCe196DFD335396257e0CDF33B3f815b6fF0B` | [View](https://sepolia.arbiscan.io/address/0x432aCe196DFD335396257e0CDF33B3f815b6fF0B#code) |
 
-**Chainlink ETH/USD (Arb Sepolia):** `0x26dA680D98e805D54f0934f46b4669149c14d1cA`
+**RWA pricing:** manual `setManualPrice()` fallback ($3000 ETH/USD) — no classic Chainlink feeds remain on this testnet.
 
 ## Deployed — Polygon Amoy (80002) — All verified (post-fix)
 
@@ -63,13 +63,13 @@ Hardhat project with Solidity smart contracts for the Trestle DeFi Marketplace.
 | Mock xNOBT | `0x4eC3777B16FC7Da556B451679A10A8fDFC5Fd48D` | [View](https://amoy.polygonscan.com/address/0x4eC3777B16FC7Da556B451679A10A8fDFC5Fd48D#code) |
 | Mock xBRT | `0xA8fb99180AdfFD8d0986A32f472faD2A17B57D7D` | [View](https://amoy.polygonscan.com/address/0xA8fb99180AdfFD8d0986A32f472faD2A17B57D7D#code) |
 
-**Chainlink ETH/USD (Polygon Amoy):** `0x001382149eBa3441043c1c66972b4772963f5D43`
+**RWA pricing:** manual `setManualPrice()` fallback ($0.20 POL/USD) — POL/USD feed sunset; only ETH/USD remains (wrong asset for native deposits).
 
 ## Supported Networks
 
 | Network | Chain ID | Native | RPC | Status |
 |---------|----------|--------|-----|--------|
-| Polygon Amoy | 80002 | POL | `https://rpc-amoy.polygon.technology/` | Deployed |
+| Polygon Amoy | 80002 | POL | `https://polygon-amoy-bor-rpc.publicnode.com` | Deployed |
 | Base Sepolia | 84532 | ETH | `https://sepolia.base.org` | Deployed |
 | Arbitrum Sepolia | 421614 | ETH | `https://sepolia-rollup.arbitrum.io/rpc` | Deployed |
 | Polygon PoS | 137 | POL | `https://polygon-rpc.com/` | Configured |
@@ -87,7 +87,7 @@ npx hardhat test
 
 ## Deploy
 
-Deployment follows a resumable pipeline strategy (dual RPC endpoints, batch checkpointing, deterministic addresses). See `best-deploy-contract.md` for infrastructure notes.
+Deployment follows a resumable pipeline strategy (health-checked dual RPC endpoints, per-chain checkpointing). RWA-only redeployments: `scripts/redeploy-rwa.js` (deploy + whitelist + oracle-first/manual-price + auto-verify).
 
 ```bash
 # Deploy to Base Sepolia
@@ -132,11 +132,13 @@ contracts/
 │       ├── MockERC20.sol
 │       └── MockV3Aggregator.sol
 ├── scripts/
-│   ├── deploy_v2.js            # Multi-chain deploy (auto-detect chain)
-│   ├── deploy_all.js           # Lightweight deploy (5 contracts)
-│   └── deploy.js               # Full deploy with mock stablecoins
+│   ├── deploy.js               # Full deploy with mock stablecoins
+│   ├── redeploy-rwa.js         # RWA-only redeploy + config + verify
+│   ├── verify_live.js          # On-chain live-config checks
+│   └── e2e_amoy.js             # Amoy end-to-end flow
 ├── test/
-│   ├── Heavy.test.js           # 91 security-focused tests
-│   └── TrestleProtocol.test.js # 37 integration tests
+│   ├── Heavy.test.js           # 94 security-focused tests
+│   ├── TrestleProtocol.test.js # 38 integration tests
+│   └── Yield.test.js           # 5 ERC-4626 yield tests
 └── hardhat.config.js           # Multi-network config
 ```
