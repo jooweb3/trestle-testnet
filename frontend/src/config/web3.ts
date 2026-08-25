@@ -3,14 +3,7 @@ import { polygonAmoy, baseSepolia, arbitrumSepolia } from "viem/chains";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
 import { createAppKit } from "@reown/appkit/react";
 
-export const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? "";
-
-if (!process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID) {
-  console.error(
-    "WalletConnect Project ID is missing. Wallet connection will fail. " +
-      "Set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID in .env.local (create one at https://cloud.reown.com)."
-  );
-}
+export const projectId = "1b490e80a759ad50a260cae875595bad";
 
 const AMOY_RPC = [
   "https://polygon-amoy.drpc.org",
