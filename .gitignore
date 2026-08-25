@@ -32,3 +32,5 @@ foundry.toml.bak
 
 # OS
 .DS_Store
+Thumbs.db
+Desktop.ini

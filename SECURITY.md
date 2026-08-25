@@ -1,4 +1,4 @@
-# Security Audit — Trestle Protocol
+# Security Audit — Trestle DeFi
 
 ## Scope
 
