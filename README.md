@@ -108,24 +108,6 @@ npm run build
 
 Previously identified findings are addressed: ERC-20 payment token allowlists (`setTokenAllowed`), reentrancy guard on fee distribution, participant-only auto-approve / auto-resolve, strictly increasing milestone deadlines, single-set RWA asset info, and string RWA metadata URI. See `SECURITY.md`.
 
-## Environment Variables
-
-**Contracts** (`contracts/.env`, see `contracts/.env.example`):
-
-| Var | Required | Purpose |
-|-----|----------|---------|
-| `PRIVATE_KEY` | For deploy / verify | Deployer account |
-| `ETHERSCAN_API_KEY` | For verification | Etherscan V2 key (works across Polygonscan, Arbiscan, Basescan) |
-| `AMOY_RPC` / `POLYGON_RPC` / `ARBITRUM_RPC` / `ARBITRUM_SEPOLIA_RPC` / `BASE_SEPOLIA_RPC` / `BASE_RPC` | No | RPC overrides; public fallbacks built in |
-| `REPORT_GAS` | No | Set `true` to enable the gas reporter |
-
-**Frontend** (`frontend/.env`, see `frontend/.env.example`) — all optional:
-
-- `NEXT_PUBLIC_ETHERSCAN_API_KEY`, `NEXT_PUBLIC_BLOCKSCOUT_API_KEY` — explorer history fallbacks
-- `NEXT_PUBLIC_AI_API_URL`, `NEXT_PUBLIC_REWARD_API_URL` — Jonah/Astra chat endpoints (production defaults baked in)
-
-The WalletConnect Project ID is a public client identifier, hardcoded in `frontend/src/config/web3.ts` — no variable needed.
-
 ## Deploy
 
 Cloudflare Pages — auto-deploys on push to main. Build command: `npm run build`, publish dir: `out/`.
